@@ -281,31 +281,20 @@ void add_box( struct matrix * points,
   x2 = x + width;
   y2 = y - height;
   z2 = z - depth;
+  
+  add_polygon( points,x,y,z,x,y2,z,x2,y2,z);//fb
+  add_polygon( points,x,y,z,x2,y2,z,x2,y,z);//ft
+  add_polygon( points,x,y,z,x2,y,z,x,y,z2);//tb
+  add_polygon( points,x,y,z2,x2,y,z,x2,y,z2);//tt
+  add_polygon( points,x,y,z,x2,y2,z,x2,y2,z2);//rb
+  add_polygon( points,x2,y2,z2,x2,y,z2,x2,y,z);//rt
+  add_polygon( points,x,y,z,x,y,z2,x,y2,z);//lt
+  add_polygon( points,x,y2,z,x,y,z2,x,y2,z2);//lb
+  add_polygon( points,x,y,z2,x2,y,z2,x,y2,z2);//backt
+  add_polygon( points,x2,y,z2,x2,y2,z2,x,y2,z2);//backb
+  add_polygon( points,x2,y2,z2,x2,y2,z,x,y2,z);//bb
+  add_polygon( points,x,y2,z,x,y2,z2,x2,y2,z2);//bt
 
-  add_edge( points, 
-	    x, y, z, 
-	    x, y, z );
-  add_edge( points, 
-	    x, y2, z, 
-	    x, y2, z );
-  add_edge( points, 
-	    x2, y, z, 
-	    x2, y, z );
-  add_edge( points, 
-	    x2, y2, z, 
-	    x2, y2, z );
-  add_edge( points, 
-	    x, y, z2, 
-	    x, y, z2 );
-  add_edge( points, 
-	    x, y2, z2, 
-	    x, y2, z2 );
-  add_edge( points, 
-	    x2, y, z2, 
-	    x2, y, z2 );
-  add_edge( points, 
-	    x2, y2, z2, 
-	    x2, y2, z2 );
 }
   
 /*======== void add_circle() ==========
