@@ -55,10 +55,17 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
     return;
   }
 
-  for ( i = 0; i < polygons->lastcol - 1; i+=2 ) {
+  for ( i = 0; i < polygons->lastcol - 1; i+=3 ) {
 
+    //side 1
     draw_line( polygons->m[0][i], polygons->m[1][i],
                polygons->m[0][i+1], polygons->m[1][i+1], s, c);
+    //side 2
+    draw_line( polygons->m[0][i+1], polygons->m[1][i+1],
+               polygons->m[0][i+2], polygons->m[1][i+2], s, c);
+    //side 3
+    draw_line( polygons->m[0][i+2], polygons->m[1][i+2],
+               polygons->m[0][i], polygons->m[1][i], s, c);
   }
 }
 
