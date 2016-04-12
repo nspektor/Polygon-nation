@@ -105,12 +105,25 @@ void add_sphere( struct matrix * points,
     for ( longt = longStart; longt < longStop; longt++ ) {
       
       index = lat * (num_steps+1) + longt;
-      add_edge( points, temp->m[0][index],
-		temp->m[1][index],
-		temp->m[2][index],
-		temp->m[0][index] + 1,
-		temp->m[1][index] + 1,
-		temp->m[2][index] );
+        // add_edge( points, temp->m[0][index],
+		// temp->m[1][index],
+		// temp->m[2][index],
+		// temp->m[0][index] + 1,
+		// temp->m[1][index] + 1,
+		// temp->m[2][index] );
+      add_polygon(points,
+      	temp->m[0][index],
+      	temp->m[1][index],
+      	temp->m[2][index],
+
+      	temp->m[0][((index + 1) % temp->lastcol)],
+      	temp->m[1][((index + 1) % temp->lastcol)],  //modulated to prevent out of bounds and to wrap around
+      	temp->m[2][((index + 1) % temp->lastcol)],
+
+      	temp->m[0][((index + 1 + num_steps) % temp->lastcol)],
+      	temp->m[1][((index + 1 + num_steps) % temp->lastcol)],
+      	temp->m[2][((index + 1 + num_steps) % temp->lastcol)],
+      	)
     }//end points only
   }
   free_matrix(temp);
