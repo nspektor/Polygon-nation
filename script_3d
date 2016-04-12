@@ -106,5 +106,6 @@ yrotate
 translate
 250 350 0
 apply
-display
+save
+pic.png
 quit

@@ -129,8 +129,7 @@ void add_sphere( struct matrix * points,
 
       	temp->m[0][((index + 1 + num_steps) % temp->lastcol)],
       	temp->m[1][((index + 1 + num_steps) % temp->lastcol)],
-      	temp->m[2][((index + 1 + num_steps) % temp->lastcol)],
-      	)
+      	temp->m[2][((index + 1 + num_steps) % temp->lastcol)])
     }//end points only
   }
   free_matrix(temp);
