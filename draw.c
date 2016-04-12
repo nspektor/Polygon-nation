@@ -55,10 +55,17 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
     return;
   }
 
-  for ( i = 0; i < polygons->lastcol - 1; i+=2 ) {
+  for ( i = 0; i < polygons->lastcol - 1; i+=3 ) {
 
+    //side 1
     draw_line( polygons->m[0][i], polygons->m[1][i],
                polygons->m[0][i+1], polygons->m[1][i+1], s, c);
+    //side 2
+    draw_line( polygons->m[0][i+1], polygons->m[1][i+1],
+               polygons->m[0][i+2], polygons->m[1][i+2], s, c);
+    //side 3
+    draw_line( polygons->m[0][i+2], polygons->m[1][i+2],
+               polygons->m[0][i], polygons->m[1][i], s, c);
   }
 }
 
@@ -215,13 +222,59 @@ void add_torus( struct matrix * points,
     for ( longt = 0; longt < num_steps; longt++ ) {
       
       index = lat * num_steps + longt;
-      
-      add_edge( points, temp->m[0][index],
+      if (lat < latStop-1){
+	if (longt < longtStop-1){
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1],
+		      temp->m[0][index+1+num_steps],temp->m[1][index+1+num_steps],temp->m[2][index+1+num_steps]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+num_steps+1],temp->m[1][index+num_steps+1],temp->m[2][index+num_steps+1],
+		      temp->m[0][index+num_steps],temp->m[1][index+num_steps],temp->m[2][index+num_steps]);
+	}
+
+	else{
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][lat*num_steps],temp->m[1][lat*num_steps],temp->m[2][lat*num_steps], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1],  
+		      temp->m[0][index+num_steps],temp->m[1][index+num_steps],temp->m[2][index+num_steps]);
+	}
+      }
+
+      else{
+	if (longt < longtStop-1){
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1], 
+		      temp->m[0][index%num_steps +1],temp->m[1][index%num_steps +1],temp->m[2][index%num_steps +1]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index%num_steps +1],temp->m[1][index%num_steps +1],temp->m[2][index%num_steps +1], 
+		      temp->m[0][index%num_steps],temp->m[1][index%num_steps],temp->m[2][index%num_steps]);
+	}
+
+	else{
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][lat*num_steps],temp->m[1][lat*num_steps],temp->m[2][lat*num_steps], 
+		      temp->m[0][0],temp->m[1][0],temp->m[2][0]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][0],temp->m[1][0],temp->m[2][0],  
+		      temp->m[0][num_steps-1],temp->m[1][num_steps-1],temp->m[2][num_steps-1]);
+	}
+      }
+      /*      add_edge( points, temp->m[0][index],
 		temp->m[1][index],
 		temp->m[2][index],
 		temp->m[0][index] + 1,
 		temp->m[1][index] + 1,
-		temp->m[2][index] );
+		temp->m[2][index] );*/
     }//end points only
 }
 
@@ -294,31 +347,20 @@ void add_box( struct matrix * points,
   x2 = x + width;
   y2 = y - height;
   z2 = z - depth;
+  
+  add_polygon( points,x,y,z,x,y2,z,x2,y2,z);//fb
+  add_polygon( points,x,y,z,x2,y2,z,x2,y,z);//ft
+  add_polygon( points,x,y,z,x2,y,z,x,y,z2);//tb
+  add_polygon( points,x,y,z2,x2,y,z,x2,y,z2);//tt
+  add_polygon( points,x,y,z,x2,y2,z,x2,y2,z2);//rb
+  add_polygon( points,x2,y2,z2,x2,y,z2,x2,y,z);//rt
+  add_polygon( points,x,y,z,x,y,z2,x,y2,z);//lt
+  add_polygon( points,x,y2,z,x,y,z2,x,y2,z2);//lb
+  add_polygon( points,x,y,z2,x2,y,z2,x,y2,z2);//backt
+  add_polygon( points,x2,y,z2,x2,y2,z2,x,y2,z2);//backb
+  add_polygon( points,x2,y2,z2,x2,y2,z,x,y2,z);//bb
+  add_polygon( points,x,y2,z,x,y2,z2,x2,y2,z2);//bt
 
-  add_edge( points, 
-	    x, y, z, 
-	    x, y, z );
-  add_edge( points, 
-	    x, y2, z, 
-	    x, y2, z );
-  add_edge( points, 
-	    x2, y, z, 
-	    x2, y, z );
-  add_edge( points, 
-	    x2, y2, z, 
-	    x2, y2, z );
-  add_edge( points, 
-	    x, y, z2, 
-	    x, y, z2 );
-  add_edge( points, 
-	    x, y2, z2, 
-	    x, y2, z2 );
-  add_edge( points, 
-	    x2, y, z2, 
-	    x2, y, z2 );
-  add_edge( points, 
-	    x2, y2, z2, 
-	    x2, y2, z2 );
 }
   
 /*======== void add_circle() ==========
