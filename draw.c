@@ -209,13 +209,59 @@ void add_torus( struct matrix * points,
     for ( longt = 0; longt < num_steps; longt++ ) {
       
       index = lat * num_steps + longt;
-      
-      add_edge( points, temp->m[0][index],
+      if (lat < latStop-1){
+	if (longt < longtStop-1){
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1],
+		      temp->m[0][index+1+num_steps],temp->m[1][index+1+num_steps],temp->m[2][index+1+num_steps]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+num_steps+1],temp->m[1][index+num_steps+1],temp->m[2][index+num_steps+1],
+		      temp->m[0][index+num_steps],temp->m[1][index+num_steps],temp->m[2][index+num_steps]);
+	}
+
+	else{
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][lat*num_steps],temp->m[1][lat*num_steps],temp->m[2][lat*num_steps], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1],  
+		      temp->m[0][index+num_steps],temp->m[1][index+num_steps],temp->m[2][index+num_steps]);
+	}
+      }
+
+      else{
+	if (longt < longtStop-1){
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index+1],temp->m[1][index+1],temp->m[2][index+1], 
+		      temp->m[0][index%num_steps +1],temp->m[1][index%num_steps +1],temp->m[2][index%num_steps +1]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][index%num_steps +1],temp->m[1][index%num_steps +1],temp->m[2][index%num_steps +1], 
+		      temp->m[0][index%num_steps],temp->m[1][index%num_steps],temp->m[2][index%num_steps]);
+	}
+
+	else{
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][lat*num_steps],temp->m[1][lat*num_steps],temp->m[2][lat*num_steps], 
+		      temp->m[0][0],temp->m[1][0],temp->m[2][0]);
+	  add_polygon(points,
+		      temp->m[0][index],temp->m[1][index],temp->m[2][index], 
+		      temp->m[0][0],temp->m[1][0],temp->m[2][0],  
+		      temp->m[0][num_steps-1],temp->m[1][num_steps-1],temp->m[2][num_steps-1]);
+	}
+      }
+      /*      add_edge( points, temp->m[0][index],
 		temp->m[1][index],
 		temp->m[2][index],
 		temp->m[0][index] + 1,
 		temp->m[1][index] + 1,
-		temp->m[2][index] );
+		temp->m[2][index] );*/
     }//end points only
 }
 
