@@ -273,12 +273,6 @@ void add_torus( struct matrix * points,
 		      temp->m[0][num_steps-1],temp->m[1][num_steps-1],temp->m[2][num_steps-1]);
 	}
       }
-      /*      add_edge( points, temp->m[0][index],
-		temp->m[1][index],
-		temp->m[2][index],
-		temp->m[0][index] + 1,
-		temp->m[1][index] + 1,
-		temp->m[2][index] );*/
     }//end points only
 }
 
@@ -352,16 +346,15 @@ void add_box( struct matrix * points,
   y2 = y - height;
   z2 = z - depth;
   
-  add_polygon( points,x,y,z,x,y2,z,x2,y2,z);//fb
-  add_polygon( points,x,y,z,x2,y2,z,x2,y,z);//ft
-  add_polygon( points,x,y,z,x2,y,z,x,y,z2);//tb
-  add_polygon( points,x,y,z2,x2,y,z,x2,y,z2);//tt
-  add_polygon( points,x,y,z,x2,y2,z,x2,y2,z2);//rb
-  add_polygon( points,x2,y2,z2,x2,y,z2,x2,y,z);//rt
-  add_polygon( points,x,y,z,x,y,z2,x,y2,z);//lt
-  add_polygon( points,x,y2,z,x,y,z2,x,y2,z2);//lb
-  add_polygon( points,x,y,z2,x2,y,z2,x,y2,z2);//backt
-  add_polygon( points,x2,y,z2,x2,y2,z2,x,y2,z2);//backb
+  add_polygon( points,x,y,z,x,y2,z,x2,y2,z);//front bottom
+  add_polygon( points,x,y,z,x2,y2,z,x2,y,z);//front top
+  add_polygon( points,x,y,z,x2,y,z,x,y,z2);//top bottom
+  add_polygon( points,x,y,z2,x2,y,z,x2,y,z2);//top top
+  add_polygon( points,x2,y2,z2,x2,y,z2,x2,y,z);//right top
+  add_polygon( points,x,y,z,x,y,z2,x,y2,z);//left top
+  add_polygon( points,x,y2,z,x,y,z2,x,y2,z2);//left bottom
+  add_polygon( points,x,y,z2,x2,y,z2,x,y2,z2);//back top
+  add_polygon( points,x2,y,z2,x2,y2,z2,x,y2,z2);//back bottom
   add_polygon( points,x2,y2,z2,x2,y2,z,x,y2,z);//bb
   add_polygon( points,x,y2,z,x,y2,z2,x2,y2,z2);//bt
 
