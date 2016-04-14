@@ -54,18 +54,35 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
     printf("Need at least 2 points to draw a line!\n");
     return;
   }
-
+  double Ax, Ay, Az, Bx, By, Bz, Nx, Ny, Nz, Vx, Vy, Vz;
   for ( i = 0; i < polygons->lastcol - 1; i+=3 ) {
-
-    //side 1
-    draw_line( polygons->m[0][i], polygons->m[1][i],
-               polygons->m[0][i+1], polygons->m[1][i+1], s, c);
-    //side 2
-    draw_line( polygons->m[0][i+1], polygons->m[1][i+1],
-               polygons->m[0][i+2], polygons->m[1][i+2], s, c);
-    //side 3
-    draw_line( polygons->m[0][i+2], polygons->m[1][i+2],
-               polygons->m[0][i], polygons->m[1][i], s, c);
+    //get Vector A
+    Ax = polygons->m[0][i + 1] - polygons->m[0][i];
+    Ay = polygons->m[1][i + 1] - polygons->m[1][i];
+    Az = polygons->m[2][i + 1] - polygons->m[2][i];
+    //get Vector B
+    Bx = polygons->m[0][i + 2] - polygons->m[0][i];
+    By = polygons->m[1][i + 2] - polygons->m[1][i];
+    Bz = polygons->m[2][i + 2] - polygons->m[2][i];
+    //calc Normal vector
+    Nx = Ay*Bz - Az*By;
+    Ny = Az*Bx - Ax*Bz;
+    Nz = Ax*By - Ay*Bx;
+    //create View Vector
+    Vx = 0; Vy = 0; Vz = -1;
+    double xProd = Nx*Vx + Ny*Vy + Nz*Vz;
+    if (xProd < 0) {
+  
+      //side 1
+      draw_line( polygons->m[0][i], polygons->m[1][i],
+		 polygons->m[0][i+1], polygons->m[1][i+1], s, c);
+      //side 2
+      draw_line( polygons->m[0][i+1], polygons->m[1][i+1],
+		 polygons->m[0][i+2], polygons->m[1][i+2], s, c);
+      //side 3
+      draw_line( polygons->m[0][i+2], polygons->m[1][i+2],
+		 polygons->m[0][i], polygons->m[1][i], s, c);
+    }
   }
 }
 
@@ -351,6 +368,7 @@ void add_box( struct matrix * points,
   add_polygon( points,x,y,z,x2,y,z,x,y,z2);//top bottom
   add_polygon( points,x,y,z2,x2,y,z,x2,y,z2);//top top
   add_polygon( points,x2,y2,z2,x2,y,z2,x2,y,z);//right top
+  add_polygon( points,x2,y2,z,x2,y2,z2,x2,y,z);//right bottom
   add_polygon( points,x,y,z,x,y,z2,x,y2,z);//left top
   add_polygon( points,x,y2,z,x,y,z2,x,y2,z2);//left bottom
   add_polygon( points,x,y,z2,x2,y,z2,x,y2,z2);//back top
