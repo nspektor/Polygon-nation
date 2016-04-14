@@ -118,18 +118,37 @@ void add_sphere( struct matrix * points,
 		// temp->m[0][index] + 1,
 		// temp->m[1][index] + 1,
 		// temp->m[2][index] );
-      add_polygon(points,
-      	temp->m[0][index],
-      	temp->m[1][index],
-      	temp->m[2][index],
 
-      	temp->m[0][((index + 1) % temp->lastcol)],
+      int j = index + num_steps; 
+      add_polygon(points,
+		  temp->m[0][index],
+		  temp->m[1][index],
+		  temp->m[2][index],
+		  temp->m[0][j+1],
+		  temp->m[1][j+1],
+		  temp->m[2][j+1],
+		  temp->m[0][j],
+		  temp->m[1][j],
+		  temp->m[2][j]);
+       add_polygon(points,
+                  temp->m[0][index],
+                  temp->m[1][index],
+                  temp->m[2][index],
+                  temp->m[0][index+1],
+                  temp->m[1][index+1],
+                  temp->m[2][index+1],
+                  temp->m[0][j+1],
+                  temp->m[1][j+1],
+                  temp->m[2][j+1]);
+       
+       /*      	temp->m[0][((index + 1) % temp->lastcol)],
       	temp->m[1][((index + 1) % temp->lastcol)],  //modulated to prevent out of bounds and to wrap around
       	temp->m[2][((index + 1) % temp->lastcol)],
 
       	temp->m[0][((index + 1 + num_steps) % temp->lastcol)],
       	temp->m[1][((index + 1 + num_steps) % temp->lastcol)],
 		  temp->m[2][((index + 1 + num_steps) % temp->lastcol)]);
+       */    
     }//end points only
   }
   free_matrix(temp);
